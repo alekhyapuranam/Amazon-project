@@ -1,4 +1,4 @@
-import { cart } from '../data/cart.js';
+import { addToCart } from '../data/cart.js';
 import { products } from '../data/products.js';
 const divElement=document.querySelector('.js-products');
 let html='';
@@ -62,85 +62,7 @@ const itemcountElement=document.querySelectorAll('.js-quantity-container');
 cartbutton.forEach((button, index)=>{
     button.addEventListener('click', ()=>{
       let item=button.dataset.itemId;
-      console.log(item);
-      let itemcount = itemcountElement[index].value;
-      console.log(itemcount);
-      let itemPresent;
-      
-      if(cart.length!=0)
-        {
-          cart.forEach((order, index)=>{
-       // console.log('order :' + order);
-        /*if(verify){
-        return;
-      }*/
-        if(order.itemId===item)
-        {
-          itemPresent=order;
-         /* let count1= parseInt(order.count);
-          console.log(typeof count1);
-          order.count= (count1+parseInt(itemcount)).toString();
-          console.log('if block');
-          verify=true;
-          return;*/
-          console.log('1st if');
-
-        }
-          })
-
-        if (itemPresent) {
-          let count1= parseInt(itemPresent.count);
-          itemPresent.count= (count1+parseInt(itemcount)).toString();
-          console.log('2nd if');
-          
-        }
-        else{
-           cart.push({
-          itemId : item,
-          count : itemcount
-      });
-         console.log('3rd if');
-        }
-        /*if(order.itemName!==item && index==cart.length-1)
-          {cart.push({
-          itemName : item,
-          count : itemcount
-  
-      });}
-          
-        console.log('else block');
-        
-       
-      })}
-      else{
-        cart.push({
-          itemName : item,
-          count : itemcount
-      });
-      console.log('other else block');
-      }
-      
-      */
-      console.log(cart);
-
-
-
-   
-}
- else{
-      cart.push({
-          itemId : item,
-          count : itemcount
-      });
-    }
-    let totalCount=0;
-    cart.forEach(order=>{
-        totalCount+=parseInt(order.count);
-   
-    })
-     console.log(totalCount);
-     const cartquantityText=document.querySelector('.js-cart-quantity');
-     cartquantityText.innerHTML=totalCount;
+      addToCart(itemcountElement,item,index);
   })
   
 })
