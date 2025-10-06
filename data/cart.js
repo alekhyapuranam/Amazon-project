@@ -87,7 +87,7 @@ export function addToCart(itemcountElement,item,index){
               count : itemcount
           });
         }
-        storeItemsInLocalStorage(cart,'item');
+       storeItemsInLocalStorage(cart,'item');
        let totalCount=0;
         cart.forEach(order=>{
             totalCount+=parseInt(order.count);
@@ -102,20 +102,25 @@ export function addToCart(itemcountElement,item,index){
         // console.log( localStorage.setItem('cartCount', totalCount.toString));
         
 }
+//localStorage.removeItem('item');
 
 export function deleteElementFromCart(deleteItem){
     //let itemToDelete= span.dataset.deleteItem;
     //console.log("itemToDelete"+ deleteItem);
     let items=[];
-    cart.forEach((product)=>{
-        if(deleteItem!==product.id)
+    cart.forEach((product,index)=>{
+        if(deleteItem===product.itemId)
         {
-            items.push({itemId : product.id, count : product.count})
+            cart.splice(index,1);
+            console.log("productid"+product.itemId);
+            //items.push({'itemId' : product.itemId, 'count' : product.count})
             //console.log(product);
         }
+        storeItemsInLocalStorage(cart,'item');
     })
-    cart=items;
-   // storeItemsInLocalStorage(cart,'item');
+   // cart=items;
+    //localStorage.removeItem('item');
+   //storeItemsInLocalStorage(cart,'item');
     
 
 

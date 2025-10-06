@@ -1,7 +1,8 @@
-import { cart, deleteElementFromCart } from '../data/cart.js';
+import { cart, deleteElementFromCart, storeItemsInLocalStorage } from '../data/cart.js';
 import { products } from '../data/products.js';
 let checkoutpagehtml='';
 cart.forEach((cartItem, index)=>{
+    console.log('cartItem'+cartItem);
     let itemId=cartItem.itemId;
     let itemImage='';
     let itemName='';
@@ -106,17 +107,14 @@ deleteOption.forEach((item)=>{
     let deleteItem=item.dataset.deleteItem
     deleteElementFromCart(deleteItem);
     let itemToDelete= document.querySelector(".cart-item-container-"+deleteItem);
-    console.log('itemToDelete '+itemToDelete);
-    console.log(".cart-item-container-"+deleteItem);
-    console.dir(itemToDelete);
     itemToDelete.remove();
     let cartCount=0;
     cart.forEach((product)=>{
-        cart.cartCount+=product.count;
+        cartCount+=parseInt(product.count);
 
     })
-    console.log('deleteoption cartcount '+cart);
-   // storeItemsInLocalStorage(cartCount,'cartCount');
+    console.log('deleteoption cartcount '+cartCount);
+    storeItemsInLocalStorage(cartCount,'cartCount');
 
 })
 
