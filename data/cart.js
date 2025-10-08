@@ -16,6 +16,21 @@ export function storeItemsInLocalStorage(toConvert,key){
     localStorage.setItem(key, JSON.stringify(toConvert));
 
 }
+export function calCartCount(){
+  const cartquantityText=document.querySelector('.js-cart-quantity');
+   let totalCount=0;
+        cart.forEach(order=>{
+            totalCount+=parseInt(order.count);
+       
+        })
+         console.log(totalCount);
+         if(cartquantityText){
+         cartquantityText.innerHTML=totalCount;
+         }
+
+         storeItemsInLocalStorage(totalCount,'cartCount');
+
+}
 export function addToCart(itemcountElement,item,index){
         console.log(item);
         let itemcount = itemcountElement[index].value;
@@ -88,17 +103,18 @@ export function addToCart(itemcountElement,item,index){
           });
         }
        storeItemsInLocalStorage(cart,'item');
-       let totalCount=0;
+       calCartCount();
+      /* let totalCount=0;
         cart.forEach(order=>{
             totalCount+=parseInt(order.count);
        
         })
          console.log(totalCount);
-         storeItemsInLocalStorage(totalCount,'cartCount');
+         storeItemsInLocalStorage(totalCount,'cartCount');*/
         //const cartquantityText=document.querySelector('.js-cart-quantity');
          //let totalCartCount = JSON.parse(localStorage.getItem('cartCount'));
         // console.log(totalCartCount);
-         cartquantityText.innerHTML=totalCount;
+         
         // console.log( localStorage.setItem('cartCount', totalCount.toString));
         
 }
@@ -122,6 +138,26 @@ export function deleteElementFromCart(deleteItem){
     //localStorage.removeItem('item');
    //storeItemsInLocalStorage(cart,'item');
     
+    calCartCount();
 
+}
+
+export function updateCount(inputElement, updateElementItemId){
+    console.log('inputelement', inputElement.value);
+    let elementToUpdate;
+    cart.forEach((element,index)=>{
+        if(element.itemId===updateElementItemId){
+           elementToUpdate=element;
+           element.count=inputElement.value;
+           let quantityLabel=document.querySelectorAll('.quantity-label');
+           quantityLabel[index].innerHTML=inputElement.value;
+           console.log('in if statement');
+        }
+       // elementToUpdate.count=inputElement.value;
+       // console.log("elementToUpdate", elementToUpdate.count);
+       // console.log("elementToUpdate", elementToUpdate.count);
+    })
+    storeItemsInLocalStorage(cart,'item');
+     calCartCount();
 
 }

@@ -1,4 +1,4 @@
-import { cart, deleteElementFromCart, storeItemsInLocalStorage } from '../data/cart.js';
+import { cart, deleteElementFromCart, updateCount } from '../data/cart.js';
 import { products } from '../data/products.js';
 let checkoutpagehtml='';
 cart.forEach((cartItem, index)=>{
@@ -37,9 +37,10 @@ cart.forEach((cartItem, index)=>{
                   <span>
                     Quantity: <span class="quantity-label">${cartItem.count}</span>
                   </span>
-                  <span class="update-quantity-link link-primary">
+                  <span class="update-quantity-link link-primary" data-update-item='${itemId}'>
                     Update
                   </span>
+                  <span class='span-to-update-span'></span>
                   <span class="delete-quantity-link link-primary" data-delete-item='${itemId}'>
                     Delete
                   </span>
@@ -109,13 +110,51 @@ deleteOption.forEach((item)=>{
     let itemToDelete= document.querySelector(".cart-item-container-"+deleteItem);
     itemToDelete.remove();
     let cartCount=0;
-    cart.forEach((product)=>{
+    /*cart.forEach((product)=>{
         cartCount+=parseInt(product.count);
 
     })
     console.log('deleteoption cartcount '+cartCount);
-    storeItemsInLocalStorage(cartCount,'cartCount');
+    storeItemsInLocalStorage(cartCount,'cartCount');*/
+   // calCartCount();
 
 })
+
+})
+
+let updateOption= document.querySelectorAll(".update-quantity-link");
+console.log(updateOption);
+let updated=1;
+updateOption.forEach((element,index)=>{
+    let inputElement;
+    let updateElementItemId=element.dataset.updateItem;
+    element.addEventListener("click",()=>{
+        if(inputElement){
+            
+            updateCount(inputElement, updateElementItemId);
+            inputElement.remove();
+            //console.log(updated);
+            //updated=1;
+        }else{
+        inputElement=document.createElement('input');
+        inputElement.type='text';
+        inputElement.classList.add('.count-update');
+        let insideSpan=document.querySelectorAll(".span-to-update-span");
+        console.log(insideSpan);
+        //let spanElement=document.createElement('span');
+        //spanElement.textContent='Update';
+        //spanElement.classList.add('link-primary');
+        insideSpan[index].append(inputElement);
+        //console.log(updated);
+        //updated=0;
+        
+        }
+       
+        
+        //element.appendChild(spanElement);
+        //element.innerHTML=`<span><input type=""></input></span>`
+        
+    })
+    
 
 })
