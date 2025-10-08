@@ -1,5 +1,7 @@
 import { cart, deleteElementFromCart, updateCount } from '../data/cart.js';
 import { products } from '../data/products.js';
+//let day=dayjs();
+//console.log("today :",day);
 let checkoutpagehtml='';
 cart.forEach((cartItem, index)=>{
     console.log('cartItem'+cartItem);
@@ -133,9 +135,12 @@ updateOption.forEach((element,index)=>{
             
             updateCount(inputElement, updateElementItemId);
             inputElement.remove();
+            inputElement=null;
             //console.log(updated);
             //updated=1;
+            console.log('input element :', inputElement);
         }else{
+          console.log('creating input element');
         inputElement=document.createElement('input');
         inputElement.type='text';
         inputElement.classList.add('.count-update');

@@ -147,11 +147,18 @@ export function updateCount(inputElement, updateElementItemId){
     let elementToUpdate;
     cart.forEach((element,index)=>{
         if(element.itemId===updateElementItemId){
+          let quantityLabel=document.querySelectorAll('.quantity-label');
            elementToUpdate=element;
-           element.count=inputElement.value;
-           let quantityLabel=document.querySelectorAll('.quantity-label');
-           quantityLabel[index].innerHTML=inputElement.value;
-           console.log('in if statement');
+           if(inputElement.value)
+           {
+              element.count=inputElement.value;
+              quantityLabel[index].innerHTML=inputElement.value;
+           }
+           else{
+              quantityLabel[index].innerHTML=element.count;
+           }
+           
+           console.log(quantityLabel[index].innerHTML);
         }
        // elementToUpdate.count=inputElement.value;
        // console.log("elementToUpdate", elementToUpdate.count);
@@ -159,5 +166,6 @@ export function updateCount(inputElement, updateElementItemId){
     })
     storeItemsInLocalStorage(cart,'item');
      calCartCount();
+     inputElement.remove();
 
 }
