@@ -1,23 +1,50 @@
+
 export let cart=JSON.parse(localStorage.getItem('item'));
 if(!cart){
-    cart=[];
+    cart=[{itemId: '15b6fc6f-327a-4ec4-896f-486349e85a3d', count: '2', optionsId:'1'},
+{itemId: 'e43638ce-6aa0-4b85-b27f-e1d07eb678c6', count: '1', optionsId:'2'},
+{itemId: '83d4ca15-0f35-48f5-b7a3-1ea210004f2e', count: '1', optionsId:'2'}];
 }
+export let checkOutDate=[{
+  itemId:'1',
+  deliveryTime:'7 days' , 
+  priceCents:'0'
+
+  
+},
+{
+  itemId:'2',
+  deliveryTime:'3 days',
+  priceCents:'499'
+},
+{
+  itemId:'3',
+  deliveryTime:'1 day',
+  priceCents: '999'
+}];
 //let totalCartCount = JSON.parse(localStorage.getItem('cartCount'));
 //console.log(totalCartCount);
 const cartquantityText=document.querySelector('.js-cart-quantity');
+const checkout=document.querySelector('.return-to-home-link');
 let totalCartCount = JSON.parse(localStorage.getItem('cartCount'));
 console.log('totalCartCount'+ totalCartCount);
 console.log(cartquantityText);
 if(cartquantityText){
 cartquantityText.innerHTML=totalCartCount;
+
+}
+if(checkout){
+  checkout.innerHTML=totalCartCount;
 }
 
+console.log(cart);
 export function storeItemsInLocalStorage(toConvert,key){
     localStorage.setItem(key, JSON.stringify(toConvert));
 
 }
 export function calCartCount(){
   const cartquantityText=document.querySelector('.js-cart-quantity');
+  const checkoutItems=document.querySelector('.return-to-home-link');
    let totalCount=0;
         cart.forEach(order=>{
             totalCount+=parseInt(order.count);
@@ -27,8 +54,13 @@ export function calCartCount(){
          if(cartquantityText){
          cartquantityText.innerHTML=totalCount;
          }
-
+         if(checkoutItems)
+         {
+           checkoutItems.innerHTML=totalCount;
+         }
+          
          storeItemsInLocalStorage(totalCount,'cartCount');
+         return totalCount;
 
 }
 export function addToCart(itemcountElement,item,index){
@@ -66,7 +98,8 @@ export function addToCart(itemcountElement,item,index){
             else{
                cart.push({
               itemId : item,
-              count : itemcount
+              count : itemcount,
+              optionsId:'1'
           });
              console.log('3rd if');
             }
@@ -99,7 +132,8 @@ export function addToCart(itemcountElement,item,index){
      else{
           cart.push({
               itemId : item,
-              count : itemcount
+              count : itemcount,
+              optionsId: '1'
           });
         }
        storeItemsInLocalStorage(cart,'item');
@@ -116,6 +150,12 @@ export function addToCart(itemcountElement,item,index){
         // console.log(totalCartCount);
          
         // console.log( localStorage.setItem('cartCount', totalCount.toString));
+
+        let deliveryOption7Days=document.querySelector('.delivery-option-7days');
+let deliveryOption3Days=document.querySelector('.delivery-option-3days');
+let deliveryOptionNextday=document.querySelector('.delivery-option-nextday');
+
+shippingDates(deliveryOption7Days,deliveryOption3Days,deliveryOptionNextday);
         
 }
 //localStorage.removeItem('item');
@@ -140,25 +180,26 @@ export function deleteElementFromCart(deleteItem){
     
     calCartCount();
 
+
 }
 
-export function updateCount(inputElement, updateElementItemId){
-    console.log('inputelement', inputElement.value);
+export function updateCount(value, updateElementItemId){
+    console.log('inputelement', value);
     let elementToUpdate;
     cart.forEach((element,index)=>{
         if(element.itemId===updateElementItemId){
-          let quantityLabel=document.querySelectorAll('.quantity-label');
+          //let quantityLabel=document.querySelectorAll('.quantity-label');
            elementToUpdate=element;
-           if(inputElement.value)
+           if(value)
            {
-              element.count=inputElement.value;
-              quantityLabel[index].innerHTML=inputElement.value;
+              element.count=value;
+             // quantityLabel[index].innerHTML=inputElement.value;
            }
            else{
-              quantityLabel[index].innerHTML=element.count;
+              element.count=element.count;
            }
            
-           console.log(quantityLabel[index].innerHTML);
+         //  console.log(quantityLabel[index].innerHTML);
         }
        // elementToUpdate.count=inputElement.value;
        // console.log("elementToUpdate", elementToUpdate.count);
@@ -166,6 +207,11 @@ export function updateCount(inputElement, updateElementItemId){
     })
     storeItemsInLocalStorage(cart,'item');
      calCartCount();
-     inputElement.remove();
+    // inputElement.remove();
 
+}
+export function shippingDates(deliveryOption7Days,deliveryOption3Days,deliveryOptionNextday) {
+ 
+
+  
 }
