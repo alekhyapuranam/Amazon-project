@@ -35,7 +35,7 @@ cart.forEach((cartItem, index)=>{
     checkoutpagehtml+=`
       <div class="cart-item-container-${itemId} cart-item-container" data-item-id="${itemId}">
             <div class="delivery-date">
-              Delivery date: ${plusSeven}
+              Delivery date: ${calculateDeliveryDate(cartItem.optionsId)}
             </div>
 
             <div class="cart-item-details-grid">
@@ -150,6 +150,18 @@ deliveryOptions.forEach((cartItem,index)=>{
 
 
 })*/
+function calculateDeliveryDate(optionId){
+  if(optionId==='1'){
+    return plusSeven;
+  }
+  else if(optionId==='2'){
+    return plusThree;
+  }
+  else if(optionId==='3'){
+    return nextDay;
+  }
+
+}
 function selectShippingOption(cartOptionsId,checkOutDateId){
   let matchingItem;
  // let matchingItem=cart.find(cartItem=>checkOutDate.find(checkOutDateItem=>
@@ -227,7 +239,7 @@ function RenderdeliveryOption(cartOptionsId,checkOutDate){
    return deliveryOptionsHTML;             
 }
 
-let cartItems=document.querySelectorAll('.cart-item-container');
+/*let cartItems=document.querySelectorAll('.cart-item-container');
 cartItems.forEach((element)=>{
   element.querySelectorAll(".delivery-option").forEach((option)=>{
     option.addEventListener('click',()=>{
@@ -251,6 +263,28 @@ cartItems.forEach((element)=>{
   });
 
 
+})*/
+
+//delivery date selection using event delegation
+let cartItem=document.querySelector('.order-summary');
+cartItem.addEventListener('click',(event)=>{
+  let element= event.target.closest('.cart-item-container');
+  if(element)
+  {
+    let elementId= element.dataset.itemId;
+    let deliveryDate=event.target.closest('.delivery-option');
+    if(deliveryDate){
+      console.log(deliveryDate.dataset.id);
+    }
+    cart.forEach((element)=>{
+      if(element.itemId===elementId){
+        element.optionsId=deliveryDate.dataset.id;
+      }
+    })
+    storeItemsInLocalStorage(cart,'item');
+    render();
+  }
+  //storeItemsInLocalStorage(cart,'item');
 })
 
 
