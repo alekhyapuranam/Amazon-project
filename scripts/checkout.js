@@ -1,6 +1,8 @@
 import dayjs from 'https://unpkg.com/dayjs@1.11.11/esm/index.js';
 import { cart, checkOutDate, deleteElementFromCart, storeItemsInLocalStorage, updateCount } from '../data/cart.js';
 import { products } from '../data/products.js';
+import { renderPaymentSummary } from './paymentSummary.js';
+import { centsToDollars } from './util/moneyconversion.js';
 
   let day=dayjs();
   let plusSeven=(day.add(7,'day')).format('dddd, MMMM DD');
@@ -47,7 +49,7 @@ cart.forEach((cartItem, index)=>{
                  ${itemName}
                 </div>
                 <div class="product-price">
-                  $${itemPrice/100}
+                  $${centsToDollars(itemPrice)}
                 </div>
                 <div class="product-quantity">
                   <span>
@@ -69,6 +71,7 @@ cart.forEach((cartItem, index)=>{
                   ${RenderdeliveryOption(cartItem.optionsId,checkOutDate)}
                 </div>
               </div>
+              
             </div>
           </div>
     
@@ -282,6 +285,7 @@ cartItem.addEventListener('click',(event)=>{
       }
     })
     storeItemsInLocalStorage(cart,'item');
+    renderPaymentSummary();
     render();
   }
   //storeItemsInLocalStorage(cart,'item');
@@ -315,6 +319,7 @@ deleteButton.addEventListener('click',(event)=>{
     let deleteItem=event.target.dataset.deleteItem;
     deleteElementFromCart(deleteItem);
     console.log("deleteItem", deleteItem);
+    renderPaymentSummary();
     render();
   }
   
@@ -377,6 +382,7 @@ updateButton.addEventListener('click',(event)=>{
            console.log(inputPresent);
            updateCount(value, updateElementItemId);
              console.log('target', element);
+             renderPaymentSummary()
             //inputElement.remove();
             render();
             //inputElement='';
@@ -400,3 +406,4 @@ updateButton.addEventListener('click',(event)=>{
 
   }
 })
+renderPaymentSummary();
