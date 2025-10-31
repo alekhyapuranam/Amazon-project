@@ -59,10 +59,13 @@ products.forEach(product =>{
  divElement.innerHTML=html;
 const cartbutton=document.querySelectorAll('.js-cart-button');
 const itemcountElement=document.querySelectorAll('.js-quantity-container');
+
 cartbutton.forEach((button, index)=>{
     button.addEventListener('click', ()=>{
+      console.log('itemcountelement', typeof itemcountElement[index].value);
+      let value=parseInt(itemcountElement[index].value);
       let item=button.dataset.itemId;
-      addToCart(itemcountElement,item,index);
+      addToCart(value,item);
   })
   
 })

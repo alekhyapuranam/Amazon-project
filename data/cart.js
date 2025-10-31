@@ -1,7 +1,11 @@
 
-export let cart=JSON.parse(localStorage.getItem('item'));
+export let cart;
+loadCartFromLocalStorage();
+export function loadCartFromLocalStorage(){
+cart=JSON.parse(localStorage.getItem('item'));
 if(!cart){
     cart=[];
+}
 }
 export let checkOutDate=[{
   itemId:'1',
@@ -61,10 +65,12 @@ export function calCartCount(){
          return totalCount;
 
 }
-export function addToCart(itemcountElement,item,index){
+export function addToCart(value,item){
         console.log(item);
-        let itemcount = itemcountElement[index].value;
+       loadCartFromLocalStorage();
+        let itemcount = value;
         console.log(itemcount);
+        console.log('item',item);
           let itemPresent;
           
           if(cart.length!=0)
@@ -89,7 +95,7 @@ export function addToCart(itemcountElement,item,index){
     
             if (itemPresent) {
               let count1= parseInt(itemPresent.count);
-              itemPresent.count= (count1+parseInt(itemcount)).toString();
+              itemPresent.count= (count1+itemcount).toString();
               console.log('2nd if');
               
             }
@@ -121,7 +127,7 @@ export function addToCart(itemcountElement,item,index){
           }
           
           */
-          console.log(cart);
+         
     
     
     
@@ -158,7 +164,8 @@ export function addToCart(itemcountElement,item,index){
 export function deleteElementFromCart(deleteItem){
     //let itemToDelete= span.dataset.deleteItem;
     //console.log("itemToDelete"+ deleteItem);
-    let items=[];
+    //let items=[];
+    loadCartFromLocalStorage();
     cart.forEach((product,index)=>{
         if(deleteItem===product.itemId)
         {
@@ -180,6 +187,7 @@ export function deleteElementFromCart(deleteItem){
 
 export function updateCount(value, updateElementItemId){
     console.log('inputelement', value);
+    loadCartFromLocalStorage();
     let elementToUpdate;
     cart.forEach((element,index)=>{
         if(element.itemId===updateElementItemId){
