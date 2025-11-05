@@ -55,6 +55,8 @@ let renderPaymentSummaryHtml=`
       
 `;
 let paymentSummary=document.querySelector('.payment-summary');
+if(paymentSummary){
 paymentSummary.innerHTML=renderPaymentSummaryHtml;
+}
 
 }

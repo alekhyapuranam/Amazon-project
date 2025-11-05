@@ -1,4 +1,4 @@
-import { addToCart, deleteElementFromCart, updateCount } from "../data/cart.js";
+import { addToCart, deleteElementFromCart, loadCartFromLocalStorage, updateCount } from "../../data/cart.js";
 //import * as cartModule from "../data/cart.js";
 
 describe('cart functionality test',()=>{
@@ -19,8 +19,9 @@ describe('cart functionality test',()=>{
         if(key==='item'){
             cart=JSON.parse(value);
         }
-       // loadCartFromLocalStorage();
+       
     });
+     loadCartFromLocalStorage();
     });
      it('checks the adding the new element to cart',()=>{
         console.log('cart',cart);

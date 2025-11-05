@@ -12,10 +12,11 @@ import { centsToDollars } from './util/moneyconversion.js';
     let itemImage='';
     let itemName='';
     let itemPrice='';
-    render();
-function render(){
-let checkoutpagehtml='';
+   
+   
+export function render(){
 
+let checkoutpagehtml='';
   
 cart.forEach((cartItem, index)=>{
     console.log('cartItem'+cartItem);
@@ -82,8 +83,13 @@ cart.forEach((cartItem, index)=>{
 
 //console.log(checkoutpagehtml);
 let orderSummary=document.querySelector('.js-order-summary');
-orderSummary.innerHTML=checkoutpagehtml;
+console.log('orderSummary',orderSummary);
+if(orderSummary){
+  orderSummary.innerHTML=checkoutpagehtml;
 }
+
+}
+ render(); 
 
 /*let deliveryOptions=document.querySelectorAll('.delivery-options');
 deliveryOptions.forEach((cartItem,index)=>{
@@ -270,6 +276,7 @@ cartItems.forEach((element)=>{
 
 //delivery date selection using event delegation
 let cartItem=document.querySelector('.order-summary');
+if(cartItem){
 cartItem.addEventListener('click',(event)=>{
   let element= event.target.closest('.cart-item-container');
   if(element)
@@ -290,7 +297,7 @@ cartItem.addEventListener('click',(event)=>{
   }
   //storeItemsInLocalStorage(cart,'item');
 })
-
+}
 
 /*let deleteOption= document.querySelectorAll(".delete-quantity-link");
 deleteOption.forEach((item)=>{
@@ -311,9 +318,11 @@ deleteOption.forEach((item)=>{
 //})
 
 //})
-
+deleteEventDelegation();
 //using event delegation for delete option
+export function deleteEventDelegation(){
 let deleteButton=document.querySelector('.order-summary');
+if(deleteButton){
 deleteButton.addEventListener('click',(event)=>{
   if(event.target.matches('.delete-quantity-link')){
     let deleteItem=event.target.dataset.deleteItem;
@@ -324,6 +333,8 @@ deleteButton.addEventListener('click',(event)=>{
   }
   
 })
+}
+}
 
 /*let updateOption= document.querySelectorAll(".update-quantity-link");
 console.log(updateOption);
@@ -367,6 +378,7 @@ updateOption.forEach((element,index)=>{
 
 //update option using event delegation
 let updateButton=document.querySelector('.order-summary');
+if(updateButton){
 updateButton.addEventListener('click',(event)=>{
   
   
@@ -406,4 +418,5 @@ updateButton.addEventListener('click',(event)=>{
 
   }
 })
+}
 renderPaymentSummary();

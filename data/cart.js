@@ -67,7 +67,6 @@ export function calCartCount(){
 }
 export function addToCart(value,item){
         console.log(item);
-       loadCartFromLocalStorage();
         let itemcount = value;
         console.log(itemcount);
         console.log('item',item);
@@ -165,7 +164,6 @@ export function deleteElementFromCart(deleteItem){
     //let itemToDelete= span.dataset.deleteItem;
     //console.log("itemToDelete"+ deleteItem);
     //let items=[];
-    loadCartFromLocalStorage();
     cart.forEach((product,index)=>{
         if(deleteItem===product.itemId)
         {
@@ -187,7 +185,6 @@ export function deleteElementFromCart(deleteItem){
 
 export function updateCount(value, updateElementItemId){
     console.log('inputelement', value);
-    loadCartFromLocalStorage();
     let elementToUpdate;
     cart.forEach((element,index)=>{
         if(element.itemId===updateElementItemId){
