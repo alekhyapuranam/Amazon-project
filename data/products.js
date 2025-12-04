@@ -1,5 +1,8 @@
+import { centsToDollars } from "../scripts/util/moneyconversion.js";
+
 export function findMatchingProduct(productId){
-  let matchingItem;
+  //getProducts();
+    let matchingItem;
   products.forEach((element)=>{
     if(element.id===productId){
       matchingItem= element;
@@ -7,7 +10,89 @@ export function findMatchingProduct(productId){
   })
   return matchingItem;
 }
-export const products = [
+
+export async function getProducts() {
+  
+  products=await loadProducts();
+  return products;
+}
+export let products=undefined;
+
+class Products{
+  id;
+  image;
+  name;
+  rating;
+  priceCents;
+  constructor(productDetails){
+    this.id=productDetails.id;
+    this.image=productDetails.image;
+    this.name=productDetails.name;
+    this.rating=productDetails.rating;
+    this.priceCents=productDetails.priceCents;
+  }
+  getImageUrl(){
+    return `images/ratings/rating-${this.rating.stars*10}.png`;
+  }
+  getProductPrice(cents){
+    return centsToDollars(cents);
+  }
+  getChartLink(){
+    return '';
+  }
+}
+class Clothing extends Products{
+  constructor(productDetails){
+    super(productDetails);
+    this.sizeChartLink=productDetails.sizeChartLink;
+  }
+  getChartLink(){
+     return `<a href="${this.sizeChartLink}" target="_blank">size chart link</a>`
+  }
+}
+
+export async function loadProducts() {
+   let response= await fetch('https://supersimplebackend.dev/products');
+    let result=await response.json();
+     let products=result.map((productDetails)=>{
+        if(productDetails.type==='clothing')
+        {
+          return new Clothing(productDetails);
+        }
+        return new Products(productDetails);
+
+      })
+       
+     return products;  
+
+ /* return new Promise((resolve)=>{
+    let xhr=new XMLHttpRequest();
+    xhr.open('get','https://supersimplebackend.dev/products');
+    xhr.send();
+    xhr.addEventListener('load',()=>{
+   const product=JSON.parse(xhr.responseText);
+    //console.log('products1',product);
+   products=product.map((productDetails)=>{
+      if(productDetails.type==='clothing'){
+        return new Clothing(productDetails);
+      }
+      return new Products(productDetails);
+
+    });
+      resolve(products);
+    });
+    
+
+  });
+  */
+
+  
+}
+//loadProducts();
+products=await getProducts();
+
+
+/*export const product = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
     image: "images/products/athletic-cotton-socks-6-pairs.jpg",
@@ -666,4 +751,11 @@ export const products = [
       "mens"
     ]
   }
-];
+].map((productDetails)=>{
+  if(productDetails.type==='clothing'){
+    return new Clothing(productDetails);
+  }
+  return new Products(productDetails);
+
+});/>
+*/

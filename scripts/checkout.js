@@ -1,8 +1,10 @@
 import dayjs from 'https://unpkg.com/dayjs@1.11.11/esm/index.js';
 import { cart, checkOutDate, deleteElementFromCart, storeItemsInLocalStorage, updateCount } from '../data/cart.js';
-import { products } from '../data/products.js';
+import { getProducts } from '../data/products.js';
 import { renderPaymentSummary } from './paymentSummary.js';
 import { centsToDollars } from './util/moneyconversion.js';
+//loadProducts().then((products)=>{
+let products=await getProducts();
 
   let day=dayjs();
   let plusSeven=(day.add(7,'day')).format('dddd, MMMM DD');
@@ -14,13 +16,13 @@ import { centsToDollars } from './util/moneyconversion.js';
     let itemPrice='';
    
    
-export function render(){
+ function render(){
 
 let checkoutpagehtml='';
   
 cart.forEach((cartItem, index)=>{
     console.log('cartItem'+cartItem);
-    itemId=cartItem.itemId;
+    itemId=cartItem.productId;
     itemImage='';
     itemName='';
     itemPrice='';
@@ -54,7 +56,7 @@ cart.forEach((cartItem, index)=>{
                 </div>
                 <div class="product-quantity">
                   <span>
-                    Quantity: <span class="quantity-label">${cartItem.count}</span>
+                    Quantity: <span class="quantity-label">${cartItem.quantity}</span>
                   </span>
                   <span class="update-quantity-link link-primary" data-update-item='${itemId}'>
                     Update
@@ -287,7 +289,7 @@ cartItem.addEventListener('click',(event)=>{
       console.log(deliveryDate.dataset.id);
     }
     cart.forEach((element)=>{
-      if(element.itemId===elementId){
+      if(element.productId===elementId){
         element.optionsId=deliveryDate.dataset.id;
       }
     })
@@ -320,7 +322,7 @@ deleteOption.forEach((item)=>{
 //})
 deleteEventDelegation();
 //using event delegation for delete option
-export function deleteEventDelegation(){
+function deleteEventDelegation(){
 let deleteButton=document.querySelector('.order-summary');
 if(deleteButton){
 deleteButton.addEventListener('click',(event)=>{
@@ -394,7 +396,7 @@ updateButton.addEventListener('click',(event)=>{
            console.log(inputPresent);
            updateCount(value, updateElementItemId);
              console.log('target', element);
-             renderPaymentSummary()
+             renderPaymentSummary();
             //inputElement.remove();
             render();
             //inputElement='';
@@ -420,3 +422,6 @@ updateButton.addEventListener('click',(event)=>{
 })
 }
 renderPaymentSummary();
+
+
+  

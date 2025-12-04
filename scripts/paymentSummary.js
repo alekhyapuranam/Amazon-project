@@ -1,13 +1,15 @@
-import { cart, findmatchingDeliveryPrice } from '../data/cart.js';
+import { calCartCount, cart, findmatchingDeliveryPrice } from '../data/cart.js';
+import { addToOrders } from '../data/orders.js';
 import { findMatchingProduct } from '../data/products.js';
 import { centsToDollars } from './util/moneyconversion.js';
 export function renderPaymentSummary() {
     let totalPriceCount=0;
     let totalDeliveryCost=0;
     cart.forEach((item)=>{
-        let matchingProductItem=findMatchingProduct(item.itemId);
-       // console.log(matchingItem);
-         totalPriceCount+=matchingProductItem.priceCents*parseInt(item.count);
+        let matchingProductItem=findMatchingProduct(item.productId);
+         console.log('matchingItem',item.productId);
+       console.log('matchingItem',typeof matchingProductItem.priceCents);
+         totalPriceCount+=matchingProductItem.priceCents*item.quantity;
          
          let matchingDeliveryItem=findmatchingDeliveryPrice(item.optionsId);
          console.log(matchingDeliveryItem);
@@ -25,7 +27,7 @@ let renderPaymentSummaryHtml=`
           </div>
 
           <div class="payment-summary-row">
-            <div>Items (3):</div>
+            <div>Items (${calCartCount()}):</div>
             <div class="payment-summary-money">$${centsToDollars(totalPriceCount)}</div>
           </div>
 
@@ -49,14 +51,32 @@ let renderPaymentSummaryHtml=`
             <div class="payment-summary-money">$${centsToDollars(orderTotal)}</div>
           </div>
 
-          <button class="place-order-button button-primary">
+          
+         <button class="place-order-button button-primary js-order-button">
             Place your order
           </button>
+        
       
 `;
 let paymentSummary=document.querySelector('.payment-summary');
 if(paymentSummary){
 paymentSummary.innerHTML=renderPaymentSummaryHtml;
 }
+
+document.querySelector('.js-order-button').addEventListener('click',async ()=>{
+    let response=await fetch('https://supersimplebackend.dev/orders',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body:JSON.stringify({
+        cart:cart
+      })
+    });
+     let order=await response.json();
+      addToOrders(order);
+      window.location.href='orders.html';
+      console.log('order',order);
+  }); 
 
 }

@@ -1,8 +1,13 @@
 import { addToCart } from '../data/cart.js';
-import { products } from '../data/products.js';
-const divElement=document.querySelector('.js-products');
-let html='';
+import { getProducts } from '../data/products.js';
+//loadProducts().then((products)=>{
+let products=await getProducts();
 
+ 
+ console.log('products',products);
+  const divElement=document.querySelector('.js-products');
+let html='';
+console.log("products1",products);
 products.forEach(product =>{
 
     html +=
@@ -18,14 +23,14 @@ products.forEach(product =>{
 
           <div class="product-rating-container">
             <img class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars*10}.png">
+              src=${product.getImageUrl()}>
             <div class="product-rating-count link-primary">
               ${product.rating.count}
             </div>
           </div>
 
           <div class="product-price">
-            $${((product.priceCents)/100).toFixed(2)}
+            $${product.getProductPrice(product.priceCents)}
           </div>
 
           <div class="product-quantity-container js-product-quantity-container">
@@ -44,6 +49,7 @@ products.forEach(product =>{
           </div>
 
           <div class="product-spacer"></div>
+          ${product.getChartLink()}
 
           <div class="added-to-cart">
             <img src="images/icons/checkmark.png">
@@ -69,3 +75,6 @@ cartbutton.forEach((button, index)=>{
   })
   
 })
+
+
+//})
