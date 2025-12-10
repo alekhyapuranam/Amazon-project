@@ -14,8 +14,25 @@ let products=await getProducts();
     let itemImage='';
     let itemName='';
     let itemPrice='';
-   
-   
+ 
+   export function getEstimatedDeliveryTime(){
+     let deliveryDay;
+     let day1=dayjs();
+   cart.forEach((item)=>{
+    if(item.deliveryOptionId==='1'){
+      deliveryDay= (day1.add(7,'day')).format('MMMM DD');
+
+    }
+    else if(item.deliveryOptionId==='2'){
+      deliveryDay = (day1.add(3,'day')).format('MMMM DD');
+    }
+    else if(item.deliveryOptionId==='3'){
+       deliveryDay=(day1.add(1,'day')).format('MMMM DD');
+    }
+
+   });
+   return deliveryDay;
+  }
  function render(){
 
 let checkoutpagehtml='';
@@ -35,12 +52,12 @@ cart.forEach((cartItem, index)=>{
         }
        
     })
-    console.log('optionId', cartItem.optionsId);
+    console.log('optionId', cartItem.deliveryOptionId);
     //console.log(itemImage);
     checkoutpagehtml+=`
       <div class="cart-item-container-${itemId} cart-item-container" data-item-id="${itemId}">
             <div class="delivery-date">
-              Delivery date: ${calculateDeliveryDate(cartItem.optionsId)}
+              Delivery date: ${calculateDeliveryDate(cartItem.deliveryOptionId)}
             </div>
 
             <div class="cart-item-details-grid">
@@ -71,7 +88,7 @@ cart.forEach((cartItem, index)=>{
               <div class="delivery-options">
                 <div class="delivery-options-title">
                   Choose a delivery option:
-                  ${RenderdeliveryOption(cartItem.optionsId,checkOutDate)}
+                  ${RenderdeliveryOption(cartItem.deliveryOptionId,checkOutDate)}
                 </div>
               </div>
               
@@ -290,7 +307,7 @@ cartItem.addEventListener('click',(event)=>{
     }
     cart.forEach((element)=>{
       if(element.productId===elementId){
-        element.optionsId=deliveryDate.dataset.id;
+        element.deliveryOptionId=deliveryDate.dataset.id;
       }
     })
     storeItemsInLocalStorage(cart,'item');

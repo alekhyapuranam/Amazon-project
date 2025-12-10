@@ -11,7 +11,7 @@ export function renderPaymentSummary() {
        console.log('matchingItem',typeof matchingProductItem.priceCents);
          totalPriceCount+=matchingProductItem.priceCents*item.quantity;
          
-         let matchingDeliveryItem=findmatchingDeliveryPrice(item.optionsId);
+         let matchingDeliveryItem=findmatchingDeliveryPrice(item.deliveryOptionId);
          console.log(matchingDeliveryItem);
          totalDeliveryCost+=parseInt(matchingDeliveryItem.priceCents);
     })
@@ -62,7 +62,7 @@ let paymentSummary=document.querySelector('.payment-summary');
 if(paymentSummary){
 paymentSummary.innerHTML=renderPaymentSummaryHtml;
 }
-
+if(document.querySelector('.js-order-button'));{
 document.querySelector('.js-order-button').addEventListener('click',async ()=>{
     let response=await fetch('https://supersimplebackend.dev/orders',{
       method:'POST',
@@ -78,5 +78,5 @@ document.querySelector('.js-order-button').addEventListener('click',async ()=>{
       window.location.href='orders.html';
       console.log('order',order);
   }); 
-
+}
 }

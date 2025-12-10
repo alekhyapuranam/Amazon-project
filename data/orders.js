@@ -1,5 +1,5 @@
 import { centsToDollars } from "../scripts/util/moneyconversion.js";
-import { cart, loadItemFromLocalStorage, storeItemsInLocalStorage } from "./cart.js";
+import { addToCart, calCartCount, cart, loadItemFromLocalStorage, storeItemsInLocalStorage } from "./cart.js";
 import { findMatchingProduct, getProducts } from "./products.js";
 
 export const orders=loadItemFromLocalStorage('orders')||[];
@@ -8,6 +8,7 @@ export function addToOrders(order){
     orders.unshift(order);
     cart.length=0;
     localStorage.removeItem('item');
+    storeItemsInLocalStorage(calCartCount(),'cartCount');
     storeItemsInLocalStorage(orders,'orders');
 }
 console.log('orders',orders);
@@ -15,8 +16,9 @@ let ordersHtml='';
 let orderItemsHtml='';
 let products=getProducts();
 //console.log('products',products);
-export function getDate(date){
-  let requiredDate=new Date(date);
+export function getDate(getdate){
+  let requiredDate=new Date(getdate);
+  console.log('required date',requiredDate);
   let formattedDate=requiredDate.toLocaleDateString('en-US',{
             month : 'long',
             day : 'numeric'
@@ -26,7 +28,7 @@ export function getDate(date){
 
 
   export function renderOrderItems(order){
-   
+     orderItemsHtml=''
     let orderItemsArray=order.products;
     orderItemsArray.forEach((product)=>{
       
@@ -35,6 +37,8 @@ export function getDate(date){
       let itemName=matchingItem.name;
       let itemImage=matchingItem.image;
       let itemDate=getDate(product.estimatedDeliveryTime);
+     // let itemDate=getEstimatedDeliveryTime();
+      console.log('product.estimatedDeliveryTime',itemDate);
       let quantity=product.quantity;
       console.log('orderItems',itemDate,itemImage,itemName,quantity);
       orderItemsHtml+=
@@ -52,14 +56,14 @@ export function getDate(date){
               <div class="product-quantity">
                 Quantity: ${quantity}
               </div>
-              <button class="buy-again-button button-primary">
-                <img class="buy-again-icon" src="images/icons/buy-again.png">
-                <span class="buy-again-message">Buy it again</span>
+              <button class="buy-again-button button-primary js-buy-again-button" data-product-id=${product.productId} data-quantity=${quantity}>
+                <img class="buy-again-icon js-buy-again-button" data-product-id=${product.productId} data-quantity=${quantity} src="images/icons/buy-again.png">
+                <span class="buy-again-message js-buy-again-button" data-product-id=${product.productId} data-quantity=${quantity}>Buy it again</span>
               </button>
             </div>
 
             <div class="product-actions">
-              <a href="tracking.html">
+              <a href="tracking.html?productId=${product.productId}&orderId=${order.id}">
                 <button class="track-package-button button-secondary">
                   Track package
                 </button>
@@ -73,6 +77,7 @@ export function getDate(date){
 }
 
 export function renderOrdersPage(){
+  
     orders.forEach((order)=>{
         
         let dateInFormat=getDate(order.orderTime);
@@ -113,4 +118,36 @@ export function renderOrdersPage(){
 
 }
 renderOrdersPage();
+let cartQuantity=document.querySelector('.cart-quantity');
+let ordersGrid=document.querySelector('.orders-grid');
+let buyAgainButton;
+if(ordersGrid){
+  console.log('buyAgainButton 1',buyAgainButton);
+ ordersGrid.addEventListener('click',(event)=>{
+  if(event.target.matches('.js-buy-again-button')){
+    buyAgainButton=event.target;
+
+    console.log('buyAgainButton 2',buyAgainButton);
+    let productIdToBuyAgain= buyAgainButton.dataset.productId;
+    let quantity=parseInt(buyAgainButton.dataset.quantity);
+    console.log('event',productIdToBuyAgain);
+    console.log('event', quantity);
+    addToCart(quantity,productIdToBuyAgain);
+     cartQuantity.innerHTML=loadItemFromLocalStorage('cartCount');
+  }
+  
+  //let productIdToBuyAgain= buyAgainButton.dataset.productId;
+  //let quantity=parseInt(buyAgainButton.dataset.quantity);
+  //addToCart(quantity,productIdToBuyAgain);
+
+
+});
+}
+
+if(cartQuantity){
+  cartQuantity.innerHTML=loadItemFromLocalStorage('cartCount');
+
+}
+
+
 
